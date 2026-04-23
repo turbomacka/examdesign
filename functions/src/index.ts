@@ -229,6 +229,7 @@ export const generateExamDesign = onCall(
   {
     region: "europe-west1",
     secrets: [OPENAI_API_KEY, OPENAI_MODEL, TELEMETRY_SALT],
+    timeoutSeconds: 240,
   },
   async (request) => {
     if (!request.auth) {
