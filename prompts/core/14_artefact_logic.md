@@ -43,6 +43,32 @@ I sådana fall behöver artefakten sättas i relation till:
 - Studentens praktiska genomförande (observation, demonstration).
 - Studentens bedömningsarbete (peer review, självvärdering mot kriterier).
 
+## Välj triangulerande underlag efter inferens, inte efter vana
+
+Kompletterande underlag ska väljas utifrån vad läraren faktiskt behöver kunna se för att göra en hållbar inferens. Börja därför inte med frågan "vilken extra text kan studenten skriva?", utan med frågan:
+
+> Vilket slags uttryck gör den aktuella dimensionen tydligast och mest trovärdigt synlig?
+
+Det innebär att triangulerande underlag ofta bör varieras i form. Text är bara ett av flera möjliga bärare.
+
+### Bred repertoar av kompletterande underlag
+
+Möjliga former inkluderar exempelvis:
+
+- **Muntliga former:** muntligt försvar, kort hearing, handledd genomgång av val, opposition.
+- **Praktiska former:** demonstration, observation i genomförande, live felsökning, iscensatt tillämpning.
+- **Spårbaserade former:** revisionsspår, versionshistorik, annoterade ändringsspår, beslutslogg.
+- **Bedömningsformer:** peer review, kriteriebunden återkoppling till annan students arbete, jämförande värdering av alternativ.
+- **Kuraterande former:** urval med motivering, prioriteringsordning mellan lösningar, val mellan konkurrerande strategier.
+
+### Designregler för val av underlag
+
+- Välj den **minst belastande form** som ändå gör dimensionen tydligt synlig.
+- Välj den **mest direkta formen** för den inferens du behöver göra.
+- Använd text när text faktiskt är bästa bärare, inte som standardlösning.
+- När process eller agens står i centrum bör du aktivt överväga om muntlig, praktisk eller observerbar form är mer träffsäker än dokumentation.
+- Om flera kompletterande underlag föreslås ska de ha **olika funktioner**, inte upprepa samma evidens i flera textvarianter.
+
 ## AI-robusthet som designprincip
 
 När artefakten ensam riskerar att inte ge underlag för att bedöma studentens eget kunnande — vilket är vanligt i AI-närvarande miljöer — förstärks behovet av kompletterande underlag. Detta är inte ett separat problem, utan en skärpt tillämpning av artefakt-logiken:

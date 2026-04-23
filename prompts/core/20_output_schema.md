@@ -64,9 +64,9 @@ All output ska returneras som JSON enligt nedanstående schema. Fri text utanfö
     "revisions": "string | null — om något reviderats under inferens-kontrollen, beskriv vad och varför"
   },
 
-  "programmaticSuggestions": "string | null — om en eller flera dimensioner inte ingår i examinationen, föreslå hur de kan realiseras i andra delar av kursen eller programmet",
+  "programmaticSuggestions": "string | null — konkret programmatisk förstärkning eller nästa steg. Använd fältet både när dimensioner inte ingår och när förslaget skulle vinna på en tydlig koppling till andra delar av kursen eller programmet",
 
-  "pitfallsAvoided": ["string — kort lista över de fallgropar som aktivt undvikits i denna design, t.ex. 'pseudo-agens', 'dokumentationsfetisch'"],
+  "pitfallsAvoided": ["string — 1–3 selektivt valda fallgropar som är särskilt relevanta här och som designen aktivt motverkar, t.ex. 'pseudo-agens', 'dokumentationsfetisch'"],
 
   "openQuestions": ["string | null — eventuella frågor till läraren där inputen var otillräcklig eller där designen behöver kalibreras mot lokala förhållanden"]
 }
@@ -75,6 +75,9 @@ All output ska returneras som JSON enligt nedanstående schema. Fri text utanfö
 ## Regler
 
 - Om en dimension inte är inkluderad (`included: false`), sätt nivå, kriterium och indikatorer till `null` eller tom array, och förklara i `rationale` varför den inte passar här. Flytta förslag till `programmaticSuggestions`.
+- `programmaticSuggestions` får också användas när alla dimensioner är inkluderade, om förslaget bör kompletteras eller fördelas vidare i kursen eller programmet. Undvik generiska fraser; skriv bara när det finns ett konkret mervärde.
+- `pitfallsAvoided` ska normalt vara kort och selektiv. Lista bara fallgropar som är reellt relevanta i detta fall och som den föreslagna designen faktiskt har byggts för att undvika.
+- I `complementaryEvidence` ska formen väljas efter vilken inferens som behöver bäras. Undvik bias mot text om muntlig, praktisk eller observerbar evidens är mer träffsäker.
 - `interrogativeElement` ska fyllas i när agens är inkluderad och uppgiften har ett moment utan givet svar. Annars `null`.
 - `inferenceCheck.passes` får bara vara `true` om varje inkluderad dimensions evidens bär sin inferens. Om inte: revidera designen innan output, och dokumentera revideringen i `revisions`.
 - `openQuestions` används när modellen behöver lärarens klargörande för att ge ett bra förslag. Hellre fråga i detta fält än att gissa.
