@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Build output
+web/.next/
+web/out/
+functions/lib/
+functions/prompts/
+
+# Env och secrets (ska ALDRIG committas)
+.env
+.env.local
+.env.*.local
+*/.env
+*/.env.local
+*/.env.*.local
+.runtimeconfig.json
+
+# Firebase lokalt
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

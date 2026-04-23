@@ -1,0 +1,121 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+:root {
+  --background: #f7f1e7;
+  --foreground: #1d211c;
+  --muted: #6b655a;
+  --paper: #fffaf0;
+  --paper-strong: #f3dcc6;
+  --line: #d7c2a6;
+  --ink: #1d211c;
+  --accent: #0f6b5f;
+  --accent-strong: #0a4f46;
+  --accent-warm: #c45a30;
+  --danger: #a33a2f;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-atkinson);
+  --font-serif: var(--font-fraunces);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-atkinson), sans-serif;
+}
+
+body::before {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  content: "";
+  background:
+    radial-gradient(circle at 12% 18%, rgb(196 90 48 / 0.22), transparent 28rem),
+    radial-gradient(circle at 86% 10%, rgb(15 107 95 / 0.2), transparent 24rem),
+    linear-gradient(135deg, #f7f1e7 0%, #efe1c8 46%, #e8d7bb 100%);
+}
+
+body::after {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  content: "";
+  background-image:
+    linear-gradient(rgb(29 33 28 / 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(29 33 28 / 0.035) 1px, transparent 1px);
+  background-size: 38px 38px;
+  mask-image: linear-gradient(to bottom, black, transparent 82%);
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+::selection {
+  color: #fffaf0;
+  background: var(--accent-strong);
+}
+
+.page-enter {
+  animation: page-enter 460ms ease-out both;
+}
+
+.stagger > * {
+  animation: item-enter 520ms ease-out both;
+}
+
+.stagger > *:nth-child(2) {
+  animation-delay: 70ms;
+}
+
+.stagger > *:nth-child(3) {
+  animation-delay: 140ms;
+}
+
+.stagger > *:nth-child(4) {
+  animation-delay: 210ms;
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes item-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

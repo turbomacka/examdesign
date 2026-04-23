@@ -1,0 +1,29 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{db}/documents {
+    match /users/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+
+      match /designs/{designId} {
+        allow read, write: if request.auth != null && request.auth.uid == uid;
+      }
+
+      match /consent/{consentId} {
+        allow read, write: if request.auth != null && request.auth.uid == uid;
+      }
+    }
+
+    match /telemetry/{doc} {
+      allow read, write: if false;
+    }
+
+    match /feedback/{doc} {
+      allow read, write: if false;
+    }
+
+    match /accessControl/{docId}/{subcol}/{subdoc} {
+      allow read, write: if false;
+    }
+  }
+}
