@@ -11,6 +11,7 @@ import type {
   AdminExportResponse,
   AdminFeedbackRecord,
   AdminStatsResponse,
+  DeleteFeedbackResponse,
   IsAdminResponse,
   PitfallId,
   WouldUseAs,
@@ -118,12 +119,24 @@ function downloadContent(content: string, filename: string, type: string) {
   URL.revokeObjectURL(url);
 }
 
+async function fetchAdminStatsData() {
+  const statsCallable = httpsCallable<Record<string, never>, AdminStatsResponse>(
+    functions,
+    "getAdminStats",
+  );
+  const statsResult = await statsCallable({});
+  return statsResult.data;
+}
+
 export function AdminDashboard() {
   const [user, authLoading] = useAuthState(auth);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState<AdminStatsResponse | null>(null);
   const [filters, setFilters] = useState<AdminFilters>(initialFilters);
   const [selected, setSelected] = useState<AdminFeedbackRecord | null>(null);
+  const [deletingFeedbackId, setDeletingFeedbackId] = useState<string | null>(
+    null,
+  );
   const [status, setStatus] = useState<string | null>(null);
   const router = useRouter();
 
@@ -153,14 +166,9 @@ export function AdminDashboard() {
           return;
         }
 
-        const statsCallable = httpsCallable<
-          Record<string, never>,
-          AdminStatsResponse
-        >(functions, "getAdminStats");
-        const statsResult = await statsCallable({});
-
+        const nextStats = await fetchAdminStatsData();
         if (!cancelled) {
-          setStats(statsResult.data);
+          setStats(nextStats);
         }
       } catch {
         if (!cancelled) {
@@ -179,6 +187,34 @@ export function AdminDashboard() {
       cancelled = true;
     };
   }, [authLoading, router, user]);
+
+  async function deleteSelectedFeedback(feedbackId: string) {
+    if (
+      !window.confirm(
+        "Ta bort den här feedbackposten permanent? Åtgärden kan inte ångras.",
+      )
+    ) {
+      return;
+    }
+
+    setStatus(null);
+    setDeletingFeedbackId(feedbackId);
+    try {
+      const callable = httpsCallable<
+        { feedbackId: string },
+        DeleteFeedbackResponse
+      >(functions, "deleteFeedback");
+      await callable({ feedbackId });
+
+      setStats(await fetchAdminStatsData());
+      setSelected(null);
+      setStatus("Feedbackposten togs bort.");
+    } catch {
+      setStatus("Kunde inte ta bort feedbackposten.");
+    } finally {
+      setDeletingFeedbackId(null);
+    }
+  }
 
   async function exportData(format: "json" | "csv") {
     setStatus(null);
@@ -219,12 +255,23 @@ export function AdminDashboard() {
     <main className="page-enter flex-1 px-4 py-8 md:px-8">
       <div className="mx-auto grid max-w-7xl gap-6">
         <header className="rounded-[1.75rem] border border-[var(--line)] bg-[rgb(255_250_240_/_0.9)] p-6 shadow-xl shadow-stone-900/5">
-          <p className="text-xs font-bold uppercase tracking-[0.24em] text-[var(--accent)]">
-            Admin
-          </p>
-          <h1 className="mt-2 font-serif text-4xl md:text-5xl">
-            Forskningskalibrering
-          </h1>
+          <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.24em] text-[var(--accent)]">
+                Admin
+              </p>
+              <h1 className="mt-2 font-serif text-4xl md:text-5xl">
+                Forskningskalibrering
+              </h1>
+            </div>
+            <button
+              className="w-fit rounded-full border border-[var(--line)] bg-white/80 px-4 py-2 text-sm font-bold text-[var(--ink)] transition hover:border-[var(--accent)]"
+              onClick={() => router.push("/ny")}
+              type="button"
+            >
+              Stäng adminläge
+            </button>
+          </div>
         </header>
 
         {status ? (
@@ -449,13 +496,25 @@ export function AdminDashboard() {
           <div className="mx-auto grid max-w-5xl gap-4 rounded-[1.5rem] bg-[var(--paper)] p-5 shadow-2xl">
             <div className="flex items-start justify-between gap-4">
               <h2 className="font-serif text-3xl">Feedbackdetalj</h2>
-              <button
-                className="rounded-full bg-[var(--ink)] px-4 py-2 text-sm font-bold text-[var(--paper)]"
-                onClick={() => setSelected(null)}
-                type="button"
-              >
-                Stäng
-              </button>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  className="rounded-full bg-[var(--danger)] px-4 py-2 text-sm font-bold text-white transition hover:opacity-90 disabled:opacity-60"
+                  disabled={deletingFeedbackId === selected.id}
+                  onClick={() => void deleteSelectedFeedback(selected.id)}
+                  type="button"
+                >
+                  {deletingFeedbackId === selected.id ?
+                    "Tar bort..." :
+                    "Ta bort feedback"}
+                </button>
+                <button
+                  className="rounded-full bg-[var(--ink)] px-4 py-2 text-sm font-bold text-[var(--paper)]"
+                  onClick={() => setSelected(null)}
+                  type="button"
+                >
+                  Stäng
+                </button>
+              </div>
             </div>
             <pre className="max-h-[70vh] overflow-auto rounded-2xl bg-stone-950 p-4 text-xs leading-5 text-stone-100">
               {JSON.stringify(selected, null, 2)}

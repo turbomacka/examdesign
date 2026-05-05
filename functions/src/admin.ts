@@ -57,6 +57,10 @@ const createInviteCodeSchema = z.object({
   expiresAt: z.string().trim().max(40).optional().default(""),
 });
 
+const deleteFeedbackSchema = z.object({
+  feedbackId: z.string().trim().min(1).max(200),
+});
+
 type ExportFilters = z.infer<typeof filtersSchema>;
 type CreateInviteCodeInput = z.infer<typeof createInviteCodeSchema>;
 
@@ -466,5 +470,28 @@ export const exportFeedback = onCall(
     }
 
     return { format: "json", content: JSON.stringify(records, null, 2) };
+  },
+);
+
+export const deleteFeedback = onCall(
+  { region: "europe-west1", secrets: [OWNER_UID] },
+  async (request) => {
+    assertAdmin(request);
+
+    const { feedbackId } = deleteFeedbackSchema.parse(request.data ?? {});
+    const db = getDb();
+    const feedbackRef = db.collection("feedback").doc(feedbackId);
+    const snapshot = await feedbackRef.get();
+
+    if (!snapshot.exists) {
+      throw new HttpsError("not-found", "Feedbackposten finns inte längre.");
+    }
+
+    await feedbackRef.delete();
+
+    return {
+      deleted: true,
+      feedbackId,
+    };
   },
 );

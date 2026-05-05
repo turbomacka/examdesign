@@ -341,6 +341,7 @@ export const generateExamDesign = onCall(
 
 export {
   createInviteCode,
+  deleteFeedback,
   exportFeedback,
   getAdminStats,
   isAdmin,

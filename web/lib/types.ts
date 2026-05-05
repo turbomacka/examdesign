@@ -163,6 +163,11 @@ export interface AdminExportResponse {
   content: string;
 }
 
+export interface DeleteFeedbackResponse {
+  deleted: boolean;
+  feedbackId: string;
+}
+
 export interface AdminInviteCode {
   id: string;
   code: string;
